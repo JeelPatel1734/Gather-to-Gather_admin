@@ -1,70 +1,100 @@
-# Getting Started with Create React App
+# GAtherr-Too-GAtherr 🍽️  
+**By Get-Together – Bringing People Together with Great Food**
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+---
 
-## Available Scripts
+## 📌 About the App
 
-In the project directory, you can run:
+**GAtherr-Too-GAtherr** is an all-in-one catering booking platform that simplifies the way you plan food for your events. Whether it’s a birthday, wedding, office lunch, or any gathering — this app lets you browse menus, customize dishes, book catering services, and pay securely — all from your device.
 
-### `npm start`
+No calls. No paperwork. Just smooth food booking, your way.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🚀 Key Features
 
-### `npm test`
+- 👤 User Signup/Login  
+- 🍛 Browse and Customize Catering Menus  
+- 🛒 Add to Cart & Secure Checkout  
+- 📅 Book Events with Date, Time & Venue  
+- 💳 Make Secure Online Payments  
+- 🧾 View Order History & Invoices  
+- 🧑‍🍳 Manager Access with Special Code  
+- 🔐 Admin Approval Portal with Secure Code
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## 🌐 Live App
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+👉 **Visit the App:**  
+[https://gatherr-too-gatherr.vercel.app](https://gatherr-too-gatherr.vercel.app)  
+*(Replace with your actual deployment URL)*
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🧑‍🏫 How to Use
 
-### `npm run eject`
+### 👥 For Customers
+1. Sign up or log in.
+2. Explore a variety of catering menus.
+3. Customize your order as per your event.
+4. Add to cart and proceed to checkout.
+5. Select your event date, time, and address.
+6. Make payment securely.
+7. Track your orders and download invoices anytime.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### 🧑‍🍳 For Managers
+1. Log in using the **Manager Access Code**.
+2. View all customer orders and scheduled events.
+3. Update status, assign resources, and manage deliveries.
+4. Access daily/weekly booking insights.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+---
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### 🛡️ For Admins
+1. Use the **Admin Access Code** to enter the Admin Panel.
+2. View and approve/reject all incoming bookings.
+3. Manage roles, users, and analytics.
+4. Control access and platform-level settings.
 
-## Learn More
+> 🔐 Access codes are managed securely and should only be used by authorized personnel.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+---
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 📸 App Preview
 
-### Code Splitting
+> *(Add your actual screenshots or remove this section if not applicable)*
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+| Home | Menu | Booking |
+|------|------|---------|
+| ![Home](screenshots/home.png) | ![Menu](screenshots/menu.png) | ![Booking](screenshots/booking.png) |
 
-### Analyzing the Bundle Size
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## 🛠️ Upcoming Features
 
-### Making a Progressive Web App
+- 📲 Mobile App Support  
+- 📬 Email & SMS Alerts  
+- 🌍 Multi-language Interface  
+- ⭐ User Ratings & Reviews  
+- 📦 Subscription Plans for Frequent Users
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+---
 
-### Advanced Configuration
+## 👨‍💻 Developed By
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+**Jeel Patel**  
+Student – George Brown College  
+Capstone Project – COMP 3059: Capstone Project II
 
-### Deployment
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## 📬 Contact
 
-### `npm run build` fails to minify
+📧 Email: jeel.patel@email.com *(update with your real email)*  
+🌐 Portfolio: [https://get-together.com](https://get-together.com) *(optional)*
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+---
+
