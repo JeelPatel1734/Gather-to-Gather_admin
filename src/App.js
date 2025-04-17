@@ -124,11 +124,11 @@ function SideDrawer() {
 }
 
 function BrandManagement() {
-    const [bookings, setBookings] = useState([]);
+  const [bookings, setBookings] = useState([]);
 
   // Fetch booking data from the new API
   useEffect(() => {
-    fetch("http://localhost:8093/getbooking")
+    fetch("http://localhost:8093/getAllBook")
       .then((response) => response.json())
       .then((data) => setBookings(data.products)) // Assuming the data is under "products"
       .catch((error) => console.error("Error fetching bookings:", error));
@@ -191,18 +191,14 @@ function BrandManagement() {
       color: '#e74c3c',
       fontWeight: 'bold',
     },
-    bookingUsername: {
+    bookingPaymentMethod: {
       fontSize: '0.9rem',
       color: '#555',
     },
-    bookingAddress: {
+    bookingStatus: {
       fontSize: '0.9rem',
       color: '#777',
       fontStyle: 'italic',
-    },
-    bookingNumber: {
-      fontSize: '0.9rem',
-      color: '#777',
     },
     bookingCreatedAt: {
       fontSize: '0.9rem',
@@ -225,20 +221,21 @@ function BrandManagement() {
           {bookings.map((booking) => (
             <div key={booking._id} style={styles.bookingCard}>
               <img
-                src={booking.image}
-                alt={booking.name}
+                src={booking.items[0].image} // Assuming the first item is always the one to display
+                alt={booking.items[0].name}
                 style={styles.bookingImage}
               />
-               <h3 style={styles.bookingName}>{booking.name}</h3>
-                <p style={styles.bookingPrice}>${booking.price}</p>
               <div style={styles.bookingDetails}>
                
-                <p style={styles.bookingUsername}>Username: {booking.username}</p>
-                <p style={styles.bookingAddress}>Address: {booking.address}</p>
-                <p style={styles.bookingNumber}>Number: {booking.number}</p>
+                <h3 style={styles.bookingName}>{booking.items[0].name}</h3>
+
+                <p style={styles.bookingPrice}>${booking.items[0].price}</p>
+               <p style={styles.bookingPaymentMethod}>Customer: {booking.email}</p>
+
+                <p style={styles.bookingPaymentMethod}>Payment: {booking.paymentMethod}</p>
+                <p style={styles.bookingStatus}>Status: {booking.status}</p>
                 <p style={styles.bookingCreatedAt}>Created At: {new Date(booking.createdAt).toLocaleString()}</p>
                 <p style={styles.bookingUpdatedAt}>Updated At: {new Date(booking.updatedAt).toLocaleString()}</p>
-
               </div>
             </div>
           ))}
@@ -249,6 +246,12 @@ function BrandManagement() {
 }
 function InventoryManagement() {
   const [products, setProducts] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [formData, setFormData] = useState({
+    product_image: "",
+    product_name: "",
+    product_price: "",
+  });
 
   // Fetch products from the API
   useEffect(() => {
@@ -258,80 +261,237 @@ function InventoryManagement() {
       .catch((error) => console.error("Error fetching products:", error));
   }, []);
 
+  // Handle form input change
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch("http://localhost:8093/product", {  // <-- Updated API endpoint
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        setProducts([...products, result.product]); // Update the product list
+        setShowModal(false); // Close modal after submission
+        setFormData({ product_image: "", product_name: "", product_price: "" }); // Reset form
+      } else {
+        console.error("Failed to add product");
+      }
+    } catch (error) {
+      console.error("Error adding product:", error);
+    }
+  };
+
   // Inline CSS styles
   const styles = {
-    dashboardContainer: {
-      display: 'flex',
-      height: '100vh',
+    dashboardContainer: { display: "flex", height: "100vh" },
+    content: { flexGrow: 1, padding: "20px", backgroundColor: "#f8f9fa" },
+    headerContainer: { display: "flex", justifyContent: "space-between", alignItems: "center" },
+    header: { fontSize: "2rem", color: "#333", marginBottom: "20px" },
+    addButton: {
+      fontSize: "1.5rem",
+      backgroundColor: "#28a745",
+      color: "white",
+      border: "none",
+      padding: "8px 12px",
+      borderRadius: "50%",
+      cursor: "pointer",
     },
-    content: {
-      flexGrow: 1,
-      padding: '20px',
-      backgroundColor: '#f8f9fa',
-    },
-    header: {
-      fontSize: '2rem',
-      color: '#333',
-      marginBottom: '20px',
-    },
-    productList: {
-      display: 'flex',
-      flexDirection: 'column',  // Vertical layout for product list
-      gap: '20px',
-      justifyContent: 'flex-start',
-    },
+    productList: { display: "flex", flexDirection: "column", gap: "20px" },
     productCard: {
-      display: 'flex',
-      alignItems: 'center', // Aligns the image and text horizontally
-    justifyContent: 'space-between', // Adds space between elements inside the card
-     backgroundColor: 'white',
-      border: '1px solid #ddd',
-      borderRadius: '8px',
-      boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-      padding: '10px 20px',
-      width: '90%',
-      transition: 'transform 0.3s ease',
-      
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      backgroundColor: "white",
+      border: "1px solid #ddd",
+      borderRadius: "8px",
+      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+      padding: "10px 20px",
+      width: "90%",
     },
-    
-    productDetails: {
-      display: 'flex',
-      flexDirection: 'column',
+    productImage: { width: "50px", height: "50px", objectFit: "contain", marginRight: "15px" },
+    productDetails: { display: "flex", flexDirection: "column" },
+    productName: { fontSize: "1.1rem", color: "#333", fontWeight: "bold" },
+    productPrice: { fontSize: "1rem", color: "#e74c3c", fontWeight: "bold" },
+
+    // Modal Styles
+    modalOverlay: {
+      position: "fixed",
+      top: "0",
+      left: "0",
+      width: "100%",
+      height: "100%",
+      backgroundColor: "rgba(0, 0, 0, 0.5)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
     },
-    productName: {
-      fontSize: '1.1rem',
-      color: '#333',
-      marginBottom: '5px',
-      fontWeight: 'bold',
+    modalContent: {
+      backgroundColor: "white",
+      padding: "20px",
+      borderRadius: "8px",
+      width: "350px",
+      display: "flex",
+      flexDirection: "column",
+      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
     },
-    productPrice: {
-      fontSize: '1rem',
-      color: '#e74c3c',
-      fontWeight: 'bold',
+    modalTitle: { fontSize: "1.5rem", marginBottom: "10px", textAlign: "center" },
+    input: {
+      width: "100%",
+      padding: "8px",
+      marginBottom: "10px",
+      border: "1px solid #ccc",
+      borderRadius: "5px",
     },
+    submitButton: { backgroundColor: "#007bff", color: "white", padding: "10px", border: "none", borderRadius: "5px", cursor: "pointer" },
+    closeButton: { marginTop: "10px", backgroundColor: "red", color: "white", padding: "5px", border: "none", borderRadius: "5px", cursor: "pointer" },
   };
 
   return (
     <div style={styles.dashboardContainer}>
       <SideDrawer />
       <div style={styles.content}>
-        <h2 style={styles.header}>Inventory</h2>
+        {/* Header with + Button */}
+        <div style={styles.headerContainer}>
+          <h2 style={styles.header}>Inventory</h2>
+          <button style={styles.addButton} onClick={() => setShowModal(true)}>+</button>
+        </div>
+
+        {/* Product List */}
         <div style={styles.productList}>
           {products.map((product) => (
             <div key={product._id} style={styles.productCard}>
-              
+              <img src={product.product_image} alt={product.product_name} style={styles.productImage} />
               <h3 style={styles.productName}>{product.product_name}</h3>
-    <p style={styles.productPrice}>Stock Available: {product.stock_available}</p>
-    <p style={styles.productPrice}>Stock Needed: {product.stock_needed}</p>
-    <p style={styles.productPrice}>Price: ${product.product_price}</p>
-          
+              <p style={styles.productPrice}>${product.product_price}</p>
             </div>
           ))}
         </div>
+
+        {/* Modal Form */}
+        {showModal && (
+          <div style={styles.modalOverlay}>
+            <div style={styles.modalContent}>
+              <h3 style={styles.modalTitle}>Add Product</h3>
+              <form onSubmit={handleSubmit}>
+                <input type="text" name="product_image" placeholder="Product Image URL" value={formData.product_image} onChange={handleInputChange} style={styles.input} required />
+                <input type="text" name="product_name" placeholder="Product Name" value={formData.product_name} onChange={handleInputChange} style={styles.input} required />
+                <input type="number" name="product_price" placeholder="Product Price" value={formData.product_price} onChange={handleInputChange} style={styles.input} required />
+                <button type="submit" style={styles.submitButton}>Add Product</button>
+                <button type="button" style={styles.closeButton} onClick={() => setShowModal(false)}>Close</button>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
 }
+// function InventoryManagement() {
+//   const [products, setProducts] = useState([]);
+
+//   // Fetch products from the API
+//   useEffect(() => {
+//     fetch("http://localhost:8093/getproducts")
+//       .then((response) => response.json())
+//       .then((data) => setProducts(data.products))
+//       .catch((error) => console.error("Error fetching products:", error));
+//   }, []);
+
+//   // Inline CSS styles
+//   const styles = {
+//     dashboardContainer: {
+//       display: 'flex',
+//       height: '100vh',
+//     },
+//     content: {
+//       flexGrow: 1,
+//       padding: '20px',
+//       backgroundColor: '#f8f9fa',
+//     },
+//     header: {
+//       fontSize: '2rem',
+//       color: '#333',
+//       marginBottom: '20px',
+//     },
+//     productList: {
+//       display: 'flex',
+//       flexDirection: 'column',  // Vertical layout for product list
+//       gap: '20px',
+//       justifyContent: 'flex-start',
+//     },
+//     productCard: {
+//       display: 'flex',
+//       alignItems: 'center', // Aligns the image and text horizontally
+//     justifyContent: 'space-between', // Adds space between elements inside the card
+//      backgroundColor: 'white',
+//       border: '1px solid #ddd',
+//       borderRadius: '8px',
+//       boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+//       padding: '10px 20px',
+//       width: '90%',
+//       transition: 'transform 0.3s ease',
+      
+//     },
+//     productImage: {
+//       width: '50px', // Smaller image size for vertical list
+//       height: '50px',
+//       objectFit: 'contain',
+//       marginRight: '15px', // Space between image and text
+//     },
+//     productDetails: {
+//       display: 'flex',
+//       flexDirection: 'column',
+//     },
+//     productName: {
+//       fontSize: '1.1rem',
+//       color: '#333',
+//       marginBottom: '5px',
+//       fontWeight: 'bold',
+//     },
+//     productPrice: {
+//       fontSize: '1rem',
+//       color: '#e74c3c',
+//       fontWeight: 'bold',
+//     },
+//   };
+
+//   return (
+//     <div style={styles.dashboardContainer}>
+//       <SideDrawer />
+//       <div style={styles.content}>
+//         <h2 style={styles.header}>Inventory</h2>
+//         <div style={styles.productList}>
+//           {products.map((product) => (
+//             <div key={product._id} style={styles.productCard}>
+//               <img
+//                 src={product.product_image}
+//                 alt={product.product_name}
+//                 style={styles.productImage}
+//               />
+//                <h3 style={styles.productName}>{product.product_name}</h3>
+             
+//                 <p style={styles.productPrice}>${product.product_price}</p>
+          
+//             </div>
+//           ))}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+
+
+
 function MenuManagement() {
    const [menuItems, setMenuItems] = useState([]);
 
@@ -436,7 +596,7 @@ function ProductManagement() {
 
   // Fetch user data from the new API
   useEffect(() => {
-    fetch("http://localhost:8093/getuser")
+    fetch("http://localhost:8093/getAllEndUser")  // Updated API URL
       .then((response) => response.json())
       .then((data) => setUsers(data.products))  // Assuming the data is under "products"
       .catch((error) => console.error("Error fetching users:", error));
@@ -488,10 +648,13 @@ function ProductManagement() {
       marginBottom: '5px',
       fontWeight: 'bold',
     },
+    userEmail: {
+      fontSize: '1rem',
+      color: '#555',
+    },
     userPassword: {
       fontSize: '1rem',
       color: '#555',
-      fontWeight: 'normal',
     },
     userCreatedAt: {
       fontSize: '0.9rem',
@@ -513,12 +676,13 @@ function ProductManagement() {
         <div style={styles.userList}>
           {users.map((user) => (
             <div key={user._id} style={styles.userCard}>
-           
+              <div style={styles.userDetails}>
                 <h3 style={styles.userName}>{user.username}</h3>
+                <p style={styles.userEmail}>Email: {user.email}</p>  {/* Display the email */}
                 <p style={styles.userPassword}>Password: {user.password}</p>
                 <p style={styles.userCreatedAt}>Created At: {new Date(user.createdAt).toLocaleString()}</p>
                 <p style={styles.userUpdatedAt}>Updated At: {new Date(user.updatedAt).toLocaleString()}</p>
-        
+              </div>
             </div>
           ))}
         </div>
@@ -526,6 +690,7 @@ function ProductManagement() {
     </div>
   );
 }
+
 export default App;
 
 const styles = `
